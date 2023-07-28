@@ -2,8 +2,6 @@
 @tailwind components;
 @tailwind utilities;
 
-
-
 body {
   width: 100%;
   font-family: "Martel Sans", sans-serif;
@@ -12,5 +10,3 @@ body {
 .wrapper {
   @apply 2xl:w-[1280px] mx-auto;
 }
-
-

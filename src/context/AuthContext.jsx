@@ -10,7 +10,7 @@ import {
 
 import { auth, db } from "../firebase";
 
-import { setDoc, doc, collection, addDoc } from "firebase/firestore";
+import { setDoc, doc, collection } from "firebase/firestore";
 
 const AuthContext = createContext();
 

@@ -1,11 +1,15 @@
 import { useEffect, useState } from "react";
 import { IoMdArrowBack } from "react-icons/io";
 import { Link, useNavigate } from "react-router-dom";
-import { carBrands, indianStatesAndCities } from "../components/utils/data";
+import { carBrands, indianStatesAndCities } from "../utils/data";
 import { UserAuth } from "../context/AuthContext";
 import { useFirebase } from "../context/FirebaseContext";
 import { db } from "../firebase";
 import { addDoc, collection } from "firebase/firestore";
+import SelectInput from "../components/Form/Select";
+import { TitleCard } from "../components/Cards";
+import { FileUpload } from "../components/Form/FileUpload";
+import { InputField, TextArea } from "../components/Form/Input";
 
 const defaultFormData = {
   brand: "",
@@ -31,7 +35,6 @@ const Post = () => {
   const [errorData, setErrorData] = useState(defaultFormData);
 
   const [cityList, setCityList] = useState([]);
-
 
   const {
     brand,
@@ -138,6 +141,7 @@ const Post = () => {
   return (
     <>
       <Navbar />
+
       <div>
         <h2 className="text-center text-2xl font-bold py-3 text-teal-950">
           POST YOUR AD
@@ -239,139 +243,6 @@ const Navbar = () => {
           </Link>
         </div>
       </div>
-    </>
-  );
-};
-
-const TitleCard = ({ title }) => {
-  return (
-    <h2 className="text-lg font-bold uppercase pt-4 text-teal-950">{title}</h2>
-  );
-};
-
-const InputField = ({ label, type = "text", onChange, value, error }) => {
-  return (
-    <div className="w-[350px] my-5 flex flex-col">
-      <label className="text-base mb-1">
-        {label} <span className="text-red-500">* </span>
-      </label>
-      <input
-        value={value}
-        type={type}
-        className={`border ${
-          error && " border-2 border-red-500"
-        } focus:border-2 focus:border-teal-500 border-teal-950 rounded-sm  text-lg outline-none  py-3 px-3`}
-        onChange={(e) => onChange && onChange(e.target.value)}
-      />
-
-      <div className="text-red-500 mt-2 font-bold text-sm">{error}</div>
-    </div>
-  );
-};
-
-const SelectInput = ({ label, options = [], value, onChange, error }) => {
-  return (
-    <div className="w-[350px] my-5 flex flex-col">
-      <label className="text-base mb-1">
-        {label} <span className="text-red-500">* </span>
-      </label>
-
-      <select
-        className={`border ${
-          error && " border-2 border-red-500"
-        } focus:border-2 focus:border-teal-500 border-teal-950 rounded-sm  text-lg outline-none  py-3 px-3`}
-        value={value}
-        onChange={(e) => onChange(e.target.value)}
-      >
-        <option></option>
-
-        {options &&
-          options.map((data, index) => (
-            <option
-              value={data.name ? data.name : data.state ? data.state : data}
-              key={index}
-            >
-              {data.name ? data.name : data.state ? data.state : data}
-            </option>
-          ))}
-      </select>
-      <div className="text-red-500 mt-2 font-bold text-sm">{error}</div>
-    </div>
-  );
-};
-
-const TextArea = ({ label, value, onChange, error }) => {
-  return (
-    <>
-      <div className="w-[350px] my-5 flex flex-col">
-        <label className="text-base mb-1">
-          {label} <span className="text-red-500">* </span>
-        </label>
-        <textarea
-          onChange={(e) => onChange(e.target.value)}
-          value={value}
-          className={`border ${
-            error && " border-2 border-red-500"
-          } focus:border-2 focus:border-teal-500 border-teal-950 rounded-sm  text-lg outline-none  py-3 px-3`}
-        ></textarea>
-      </div>
-      <div className="text-red-500 mt-2 font-bold text-sm">{error}</div>
-    </>
-  );
-};
-
-const FileUpload = ({ value, onChange, error }) => {
-  const [files, setFiles] = useState([]);
-
-  useEffect(() => {
-    if (files.length === 0) return;
-    uploadFiles();
-  }, [files]);
-
-  useEffect(() => {
-    if (!value) setFiles([]);
-  }, [value]);
-
-  const uploadFiles = async () => {
-    const formData = [];
-
-    files.forEach((file) => {
-      formData.push(file);
-    });
-
-    onChange(formData);
-  };
-
-  const handleFileChange = (event) => {
-    const selectedFiles = Array.from(event.target.files);
-    setFiles(selectedFiles);
-  };
-
-  return (
-    <>
-      <div className="flex gap-3">
-        {files.map((file, i) => {
-          return (
-            <img
-              key={i}
-              className="w-24"
-              src={file ? URL.createObjectURL(file) : ""}
-              alt=""
-            />
-          );
-        })}
-      </div>
-
-      <div className="w-[350px] my-5 flex flex-col">
-        <input
-          onChange={handleFileChange}
-          type="file"
-          className="text-lg outline-none  py-3 "
-          multiple
-        ></input>
-      </div>
-
-      <div className="text-red-500 mt-2 font-bold text-sm">{error}</div>
     </>
   );
 };

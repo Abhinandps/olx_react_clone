@@ -14,4 +14,3 @@ export const PostContextProvider = ({ children }) => {
 export function usePost() {
   return useContext(PostContext);
 }
-

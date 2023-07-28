@@ -1,19 +1,17 @@
 import { BiSearch } from "react-icons/bi";
-import { FaAngleDown } from "react-icons/fa";
-import { FaCheck } from "react-icons/fa";
+import { FaAngleDown, FaCheck } from "react-icons/fa";
 import { Link, useNavigate } from "react-router-dom";
 import { FaPlus } from "react-icons/fa";
 import { MdClose } from "react-icons/md";
 
 import { UserAuth } from "../../context/AuthContext";
 
-import { FaTimesCircle } from "react-icons/fa";
-
 import { useEffect, useRef, useState } from "react";
 import { useSearchContext } from "../../context/SearchContext";
 
 const Navbar = () => {
   const { searchTerm, updateSearchTerm } = useSearchContext();
+
   const navigate = useNavigate();
   const [isOpen, setIsOpen] = useState(false);
 
@@ -34,7 +32,6 @@ const Navbar = () => {
 
   const handleSearch = (event) => {
     updateSearchTerm(event.target.value);
-    
   };
 
   return (
@@ -61,7 +58,12 @@ const Navbar = () => {
           <div className="flex items-center gap-3">
             {user?.displayName ? (
               <>
-                <button onClick={handleSignOut}>Sign Out</button>
+                <button
+                  className="text-red-500 font-bold"
+                  onClick={handleSignOut}
+                >
+                  Sign Out
+                </button>
                 <Link to="/post">
                   <button className="shadow-lg flex gap-1 items-center border-8 border-t-emerald-300 border-r-sky-600 border-b-yellow-300  border-l-yellow-300 py-1 px-3 rounded-3xl">
                     <FaPlus size={15} className="text-teal-950 text-xs" />
@@ -155,25 +157,32 @@ function ContentSearchInput({ type = "text", placeholder, onChange, value }) {
 
 function SelectLanguage({ size = 25 }) {
   const languages = ["English", "हिंदी"];
+
+  const [isOpen, setIsOpen] = useState(false);
+
   return (
-    <div className="flex cursor-pointer relative">
+    <div
+      className="flex cursor-pointer relative"
+      onClick={() => setIsOpen((prev) => !prev)}
+    >
       <span className="text-teal-950 font-bold uppercase">English</span>
       <FaAngleDown size={size} className="text-black mx-2" />
 
-      {/* <ul className="rounded-sm w-[200px] bg-white absolute top-16 right-0 drop-shadow-md">
-        {languages.map((lang, i) => {
-          return (
-            <li
-              className="flex items-center justify-between py-3 px-3 text-teal-950 text-sm font-bold"
-              key={i}
-            >
-              {lang}
-              <FaCheck size={20} className="text-teal-800" />
-            </li>
-          );
-        })}
-      </ul>
-       */}
+      {isOpen && (
+        <ul className="rounded-sm w-[200px] bg-white absolute top-16 right-0 drop-shadow-md">
+          {languages.map((lang, i) => {
+            return (
+              <li
+                className="flex items-center justify-between py-3 px-3 text-teal-950 text-sm font-bold"
+                key={i}
+              >
+                {lang}
+                {i === 0 && <FaCheck size={20} className="text-teal-800" />}
+              </li>
+            );
+          })}
+        </ul>
+      )}
     </div>
   );
 }

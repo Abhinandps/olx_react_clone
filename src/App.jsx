@@ -1,5 +1,4 @@
 import { Route, Routes } from "react-router-dom";
-import "./App.css";
 import Navbar from "./components/Navbar";
 import Home from "./pages/Home";
 import { AuthContextProvider } from "./context/AuthContext";
@@ -31,7 +30,7 @@ function App() {
                 />
                 <Route path="/view" element={<View />} />
               </Routes>
-              
+
             </SearchContextProvider>
           </FirebaseContextProvider>
         </PostContextProvider>

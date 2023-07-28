@@ -1,15 +1,12 @@
 import { createContext, useContext } from "react";
 
-import { storage, db } from "../firebase";
-
-import { collection, doc, setDoc } from "firebase/firestore";
+import { storage } from "../firebase";
 
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 
 const FirebaseContext = createContext();
 
 export const FirebaseContextProvider = ({ children }) => {
-  
   const uploadPhotos = async (user, photoFiles) => {
     try {
       const downloadUrls = [];
