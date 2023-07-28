@@ -10,7 +10,7 @@ import {
 
 import { auth, db } from "../firebase";
 
-import { setDoc, doc } from "firebase/firestore";
+import { setDoc, doc, collection, addDoc } from "firebase/firestore";
 
 const AuthContext = createContext();
 
@@ -30,12 +30,27 @@ export const AuthContextProvider = ({ children }) => {
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
       setUser(currentUser);
+
+      const userData = {
+        id: `${currentUser?.uid}`,
+        name: `${currentUser?.displayName}`,
+        url: `${currentUser?.photoURL}`,
+      };
+
+      const userDocRef = doc(collection(db, "users"), currentUser.uid);
+      setDoc(userDocRef, userData)
+        .then(() => {
+          console.log("User document created successfully!");
+        })
+        .catch((error) => {
+          console.error("Error creating user document:", error);
+        });
     });
 
     return () => {
       unsubscribe();
     };
-  }, []);
+  }, [user?.email]);
 
   return (
     <AuthContext.Provider value={{ googleSignIn, logout, user }}>

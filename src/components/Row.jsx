@@ -2,9 +2,14 @@ import { FaHeart } from "react-icons/fa";
 import { AiOutlineHeart } from "react-icons/ai";
 import { AiFillHeart } from "react-icons/ai";
 import { FaAngleRight, FaAngleLeft } from "react-icons/fa";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { usePost } from "../context/postContext";
+
 
 const Row = ({ title, main = false, products = [] }) => {
+
+  
+
   return (
     <div className="mx-16">
       <div
@@ -29,11 +34,15 @@ const Row = ({ title, main = false, products = [] }) => {
             main ? "inline-flex" : "flex flex-wrap"
           } gap-3 justify-start `}
         >
-          {products.map((product) => {
+          {products && products.map((product) => {
             return <Card key={product.id} product={product} />;
           })}
 
-          {!main && <HighlightCard />}
+          {!main && (
+            <Link to="/post">
+              <HighlightCard />
+            </Link>
+          )}
 
           {main && (
             <>
@@ -64,9 +73,21 @@ function Card({ product }) {
     price,
     highlight,
   } = product;
+
+  const { setPostDetails } = usePost();
+  const navigate = useNavigate();
+
+  const handleProductView = () => {
+    setPostDetails(product);
+    navigate("/view");
+  };
+
   return (
-    <div className="bg-white px-2 py-2 border-2 w-[290px] h-[270px] rounded relative cursor-pointer hover:shadow-lg transition-shadow">
-      <div className="px-2 py-3 bg-slate-300 h-[140px]">
+    <div
+      className="bg-white px-2 py-2 border-2 w-[290px] h-[270px] rounded relative cursor-pointer hover:shadow-lg transition-shadow"
+      onClick={handleProductView}
+    >
+      <div className="h-[140px]">
         <img
           src={photos[0]}
           alt="name"
@@ -119,9 +140,5 @@ function HighlightCard() {
     </div>
   );
 }
-
-
-
-
 
 export default Row;

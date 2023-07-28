@@ -12,8 +12,9 @@ import { FaTimesCircle } from "react-icons/fa";
 import { useEffect, useRef, useState } from "react";
 
 const Navbar = () => {
+  const navigate = useNavigate();
   const [isOpen, setIsOpen] = useState(false);
-  const [userData, setUserData] = useState(null);
+
 
   const { user, logout } = UserAuth();
 
@@ -24,6 +25,7 @@ const Navbar = () => {
   const handleSignOut = async () => {
     try {
       await logout();
+      navigate("/");
     } catch (error) {
       console.log(error);
     }
@@ -34,7 +36,9 @@ const Navbar = () => {
       <div className="bg-slate-100 h-[70px]">
         <div className="wrapper flex h-full justify-between items-center px-8 ">
           <div className="flex h-full justify-between items-center gap-3">
-            <OlxIcon />
+            <Link to="/">
+              <OlxIcon />
+            </Link>
             <LocationSearchInput
               type="text"
               placeholder="Search city,area or locality"
@@ -85,8 +89,7 @@ const Navbar = () => {
         </div>
       </div>
 
-      <PopUp isOpen={isOpen} onToggle={togglePopup} setUserData={setUserData} />
-      {console.log(userData)}
+      <PopUp isOpen={isOpen} onToggle={togglePopup} />
     </>
   );
 };
@@ -165,7 +168,7 @@ function SelectLanguage({ size = 25 }) {
   );
 }
 
-function PopUp({ isOpen, onToggle, setUserData }) {
+function PopUp({ isOpen, onToggle }) {
   const popupRef = useRef(null);
 
   const { googleSignIn, user } = UserAuth();
@@ -173,9 +176,7 @@ function PopUp({ isOpen, onToggle, setUserData }) {
 
   const handleGoogleSignIn = async () => {
     try {
-      const user = await googleSignIn();
-      // const User = collection(db, "users");
-      // await addDoc(User, updatedFormData);
+      await googleSignIn();
     } catch (error) {
       console.log(error);
     }
@@ -183,12 +184,6 @@ function PopUp({ isOpen, onToggle, setUserData }) {
 
   useEffect(() => {
     if (user != null) {
-      console.log(user);
-      setUserData({
-        // id: `${user?.user.uid}`,
-        name: `${user?.displayName}`,
-        url: `${user?.photoURL}`,
-      });
       navigate("/");
     }
   }, [user]);

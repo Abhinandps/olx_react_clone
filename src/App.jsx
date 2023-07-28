@@ -6,19 +6,32 @@ import { AuthContextProvider } from "./context/AuthContext";
 import { FirebaseContextProvider } from "./context/FirebaseContext";
 import Post from "./pages/Post";
 import View from "./pages/View";
+import { PostContextProvider } from "./context/postContext";
+import Protected from "./components/Protected";
 
 function App() {
   return (
     <>
       <AuthContextProvider>
-        <FirebaseContextProvider>
-          <Navbar />
-          <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/post" element={<Post />} />
-            <Route path="/view" element={<View />} />
-          </Routes>
-        </FirebaseContextProvider>
+        <PostContextProvider>
+         
+            <Navbar />
+            <Routes>
+              <Route path="/" element={<Home />} />
+              <Route
+                path="/post"
+                element={
+                  <FirebaseContextProvider>
+                    <Protected>
+                      <Post />
+                    </Protected>
+                  </FirebaseContextProvider>
+                }
+              />
+              <Route path="/view" element={<View />} />
+            </Routes>
+        
+        </PostContextProvider>
       </AuthContextProvider>
     </>
   );

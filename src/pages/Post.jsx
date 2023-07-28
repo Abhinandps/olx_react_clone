@@ -32,7 +32,6 @@ const Post = () => {
 
   const [cityList, setCityList] = useState([]);
 
-  console.log(user);
 
   const {
     brand,
@@ -63,36 +62,45 @@ const Post = () => {
 
     if (!brand) {
       onError("brand", "Please select a brand");
+      return;
     }
     if (!brand) {
       onError("brand", "Please select a brand");
+      return;
     }
 
     if (!year.trim()) {
       onError("year", "Year is required");
+      return;
     }
 
     if (!kmDriven.trim()) {
       onError("kmDriven", "KM Driven is required");
+      return;
     }
 
     if (!title.trim()) {
       onError("title", "Title is required");
+      return;
     }
 
     if (!description.trim()) {
       onError("description", "Description is required");
+      return;
     }
 
     if (!price.trim()) {
       onError("price", "Price is required");
+      return;
     }
     if (photos === null) {
       onError("photos", "File is required");
+      return;
     }
 
     if (!state) {
       onError("state", "Please select a state");
+      return;
     }
     if (!city) {
       onError("city", "Please select a city");
