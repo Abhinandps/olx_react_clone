@@ -1,14 +1,27 @@
-import { FaHeart } from "react-icons/fa";
 import { AiOutlineHeart } from "react-icons/ai";
-import { AiFillHeart } from "react-icons/ai";
 import { FaAngleRight, FaAngleLeft } from "react-icons/fa";
 import { Link, useNavigate } from "react-router-dom";
 import { usePost } from "../context/postContext";
-
+import { useSearchContext } from "../context/SearchContext";
+import { useEffect } from "react";
 
 const Row = ({ title, main = false, products = [] }) => {
+  const { searchTerm, searchedProducts, updateSearchedProducts } =
+    useSearchContext();
 
-  
+  const filteredProducts = products.filter((product) =>
+    product.title.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+
+  const result = filteredProducts.length > 0 ? filteredProducts : [];
+
+  // useEffect(() => {
+  //   const recentSearches =
+  //     JSON.parse(localStorage.getItem("recentSearches")) || [];
+  //   if (recentSearches.length > 0) {
+  //     updateSearchedProducts(recentSearches[0]);
+  //   }
+  // }, []);
 
   return (
     <div className="mx-16">
@@ -20,11 +33,13 @@ const Row = ({ title, main = false, products = [] }) => {
         <div className="flex justify-between">
           <h2 className="pt-3 mb-3 text-teal-950  text-2xl">{title}</h2>
           {main && (
-            <Link className="p-4">
-              <button className="underline text-teal-950 font-bold text-sm capitalize">
-                view more
-              </button>
-            </Link>
+            <>
+              <Link className="p-4">
+                <button className="underline text-teal-950 font-bold text-sm capitalize">
+                  view more
+                </button>
+              </Link>
+            </>
           )}
         </div>
 
@@ -34,14 +49,32 @@ const Row = ({ title, main = false, products = [] }) => {
             main ? "inline-flex" : "flex flex-wrap"
           } gap-3 justify-start `}
         >
-          {products && products.map((product) => {
-            return <Card key={product.id} product={product} />;
-          })}
+          {result &&
+            result.map((product) => {
+              return <Card key={product.id} product={product} />;
+            })}
 
-          {!main && (
+          {!main && result.length > 0 && (
             <Link to="/post">
               <HighlightCard />
             </Link>
+          )}
+
+          {!main && result.length < 1 && (
+            <div className="flex flex-col items-center justify-center  py-10 bg-slate-100 w-full">
+              <h2 className="text-teal-950 font-bold text-2xl">
+                Oops... we didn't find anything that matches this search :(
+              </h2>
+              <p className="text-sm text-teal-950/70 py-2">
+                Try search for something more general, change the filters or
+                check for spelling mistakes
+              </p>
+              <img
+                className="w-48 h-48"
+                src="https://statics.olx.in/external/base/img/noResults.webp"
+                alt=""
+              />
+            </div>
           )}
 
           {main && (
@@ -50,6 +83,11 @@ const Row = ({ title, main = false, products = [] }) => {
                 <FaAngleRight />
                 {/* <FaAngleLeft /> */}
               </div>
+
+              {searchedProducts &&
+                searchedProducts.map((product) => {
+                  return <Card key={product.id} product={product} />;
+                })}
 
               <div className="absolute top-40 rounded-l-sm shadow-md left-[14px] bg-white py-5 text-2xl px-1 cursor-pointer">
                 <FaAngleLeft />

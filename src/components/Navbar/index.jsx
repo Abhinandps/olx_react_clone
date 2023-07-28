@@ -10,11 +10,12 @@ import { UserAuth } from "../../context/AuthContext";
 import { FaTimesCircle } from "react-icons/fa";
 
 import { useEffect, useRef, useState } from "react";
+import { useSearchContext } from "../../context/SearchContext";
 
 const Navbar = () => {
+  const { searchTerm, updateSearchTerm } = useSearchContext();
   const navigate = useNavigate();
   const [isOpen, setIsOpen] = useState(false);
-
 
   const { user, logout } = UserAuth();
 
@@ -31,6 +32,11 @@ const Navbar = () => {
     }
   };
 
+  const handleSearch = (event) => {
+    updateSearchTerm(event.target.value);
+    
+  };
+
   return (
     <>
       <div className="bg-slate-100 h-[70px]">
@@ -44,6 +50,8 @@ const Navbar = () => {
               placeholder="Search city,area or locality"
             />
             <ContentSearchInput
+              value={searchTerm}
+              onChange={handleSearch}
               type="text"
               placeholder="Find Cars, Mobile Phones and more..."
             />
@@ -126,11 +134,13 @@ function LocationSearchInput({ type = "text", placeholder, size = 25 }) {
   );
 }
 
-function ContentSearchInput({ type = "text", placeholder }) {
+function ContentSearchInput({ type = "text", placeholder, onChange, value }) {
   return (
     <div className="hidden sm:inline-flex relative w-[55px] md:w-[100px]  xl:w-[650px]">
       <div className="flex items-center relative bg-white w-0  md:w-[50px]  xl:w-[600px] z-[2]  border-2 border-teal-950  py-2 rounded focus-within:border-cyan-200">
         <input
+          value={value}
+          onChange={onChange}
           type={type}
           className="bg-transparent text-md text-slate-800 w-full h-full outline-none pl-3 py-1"
           placeholder={placeholder}

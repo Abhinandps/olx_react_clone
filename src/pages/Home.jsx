@@ -7,7 +7,7 @@ import { db } from "../firebase";
 
 const Home = () => {
   const [products, setProducts] = useState([]);
-  
+
   useEffect(() => {
     const fetchData = async () => {
       try {
